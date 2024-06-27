@@ -1,4 +1,3 @@
-
 import { uploadPhoto, createUser } from './utils';
 
 export default function handleProfileSignup() {
@@ -9,4 +8,3 @@ export default function handleProfileSignup() {
     })
     .catch(() => console.log('Signup system offline'));
 }
-
