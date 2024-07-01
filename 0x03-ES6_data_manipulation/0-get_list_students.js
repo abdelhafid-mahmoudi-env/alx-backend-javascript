@@ -16,8 +16,6 @@ const serena = {
   location: 'San Francisco',
 };
 
-const students = [guillaume, james, serena];
-
 export default function getListStudents() {
-  return students;
+  return [guillaume, james, serena];
 }
