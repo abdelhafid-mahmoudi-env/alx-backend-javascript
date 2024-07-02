@@ -1,9 +1,3 @@
-export default function getListStudentIds(studentList) {
-  let idList = [];
-
-  if (Array.isArray(studentList)) {
-    idList = studentList.map(student => student.id);
-  }
-
-  return idList;
+export default function getStudentsByLocation(students, city) {
+  return students.filter((student) => student.location === city);
 }
