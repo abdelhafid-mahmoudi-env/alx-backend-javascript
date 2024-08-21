@@ -4,36 +4,36 @@ const { argv } = require('process');
 
 function countStudents(path, stream) {
   if (fs.existsSync(path)) {
-    const response = fs.readFileSync(path, 'utf8');
-    const lns = response.split('\n').filter(Boolean);
-    lns.shift();
+    const data = fs.readFileSync(path, 'utf8');
+    const lines = data.split('\n').filter(Boolean);
+    lines.shift();
 
-    const infos = lns.map((line) => {
+    const studentInfo = lines.map((line) => {
       const [name, , , field] = line.split(',');
       return { name, field };
     });
 
-    const counts = infos.reduce((acc, { field }) => {
+    const fieldCounts = studentInfo.reduce((acc, { field }) => {
       acc[field] = (acc[field] || 0) + 1;
       return acc;
     }, {});
 
-    const list_fields = Object.keys(counts).map((field) => {
-      const students = infos.filter((info) => info.field === field).map((info) => info.name);
-      return `Number of students in ${field}: ${counts[field]}. List: ${students.join(', ')}`;
+    const studentListByField = Object.keys(fieldCounts).map((field) => {
+      const students = studentInfo.filter((info) => info.field === field).map((info) => info.name);
+      return `Number of students in ${field}: ${fieldCounts[field]}. List: ${students.join(', ')}`;
     }).join('\n');
 
-    const total = lns.length;
-    stream.write(`Number of students: ${total}\n${list_fields}`);
+    const totalStudents = lines.length;
+    stream.write(`Number of students: ${totalStudents}\n${studentListByField}`);
   } else {
     throw new Error('Cannot load the database');
   }
 }
 
-const host_name = 'localhost';
-const host_port = 1245;
+const hostname = 'localhost';
+const port = 1245;
 
-const server = http.createServer((req, res) => {
+const app = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
 
@@ -53,8 +53,8 @@ const server = http.createServer((req, res) => {
   }
 });
 
-server.listen(host_port, host_name, () => {
-  console.log(`Server running at http://${host_name}:${host_port}/`);
+app.listen(port, hostname, () => {
+  console.log(`Server running at http://${hostname}:${port}/`);
 });
 
-module.exports = server;
+module.exports = app;
