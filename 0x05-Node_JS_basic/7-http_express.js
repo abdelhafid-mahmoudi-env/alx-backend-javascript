@@ -5,11 +5,11 @@ const app = express();
 const fs = require('fs').promises;
 
 /**
- * Counts the number of students in a database file and provides
- * additional information about the students.
- * @param {string} path - The path to the database file.
- * @returns {Promise<string>} A promise that resolves to a string
- * containing the number of students and additional information.
+ * Reads a CSV database file and counts the number of students,
+ * grouping them by their respective fields of study.
+ * @param {string} path - The path to the CSV database file.
+ * @returns {Promise<string>} A promise that resolves to a formatted string
+ * containing the total number of students and a breakdown by field of study.
  * @throws {Error} If the database file cannot be loaded.
  */
 async function countStudents(path) {
