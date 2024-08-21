@@ -2,8 +2,9 @@ const express = require('express');
 const fs = require('fs');
 
 const app = express();
-const port = 1245;
-const db_file = process.argv.length > 2 ? process.argv[2] : '';
+const PORT = 1245;
+const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
+
 
 const countStudents = (dataPath) => new Promise((resolve, reject) => {
   if (!dataPath) {
@@ -19,24 +20,24 @@ const countStudents = (dataPath) => new Promise((resolve, reject) => {
         const fileLines = data.toString('utf-8').trim().split('\n');
         const studentGroups = {};
         const dbFieldNames = fileLines[0].split(',');
-        const props_names = dbFieldNames.slice(
+        const studentPropNames = dbFieldNames.slice(
           0,
           dbFieldNames.length - 1,
         );
 
         for (const line of fileLines.slice(1)) {
-          const record = line.split(',');
-          const values = record.slice(
+          const studentRecord = line.split(',');
+          const studentPropValues = studentRecord.slice(
             0,
-            record.length - 1,
+            studentRecord.length - 1,
           );
-          const field = record[record.length - 1];
+          const field = studentRecord[studentRecord.length - 1];
           if (!Object.keys(studentGroups).includes(field)) {
             studentGroups[field] = [];
           }
-          const studentEntries = props_names.map((propName, idx) => [
+          const studentEntries = studentPropNames.map((propName, idx) => [
             propName,
-            values[idx],
+            studentPropValues[idx],
           ]);
           studentGroups[field].push(Object.fromEntries(studentEntries));
         }
@@ -65,7 +66,7 @@ app.get('/', (_, res) => {
 app.get('/students', (_, res) => {
   const responseParts = ['This is the list of our students'];
 
-  countStudents(db_file)
+  countStudents(DB_FILE)
     .then((report) => {
       responseParts.push(report);
       const responseText = responseParts.join('\n');
@@ -84,8 +85,8 @@ app.get('/students', (_, res) => {
     });
 });
 
-app.listen(port, () => {
-  console.log(`Server listening on PORT ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server listening on PORT ${PORT}`);
 });
 
 module.exports = app;
