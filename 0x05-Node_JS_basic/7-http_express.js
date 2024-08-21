@@ -14,11 +14,11 @@ function countStudents(fileName) {
       if (err) {
         reject(err);
       } else {
-        let myoutput = '';
-        const lns = data.toString().split('\n');
-        lns.forEach((ln, index) => {
-          if (ln) {
-            const details = ln.split(',');
+        let output = '';
+        const lines = data.toString().split('\n');
+        lines.forEach((line, index) => {
+          if (line) {
+            const details = line.split(',');
             const name = details[0];
             const field = details[3];
             if (!students[field]) {
@@ -33,15 +33,15 @@ function countStudents(fileName) {
           }
         });
 
-        myoutput += `Number of students: ${length}\n`;
+        output += `Number of students: ${length}\n`;
         Object.entries(fields).forEach(([key, value]) => {
           if (key !== 'field') {
             const studentList = students[key].join(', ');
-            myoutput += `Number of students in ${key}: ${value}. `;
-            myoutput += `List: ${studentList}\n`;
+            output += `Number of students in ${key}: ${value}. `;
+            output += `List: ${studentList}\n`;
           }
         });
-        resolve(myoutput);
+        resolve(output);
       }
     });
   });
@@ -53,8 +53,8 @@ app.get('/', (request, response) => {
 
 app.get('/students', (request, response) => {
   countStudents(process.argv[2]).then((output) => {
-    const message = ['This is the list of our students', output].join('\n');
-    response.send(message);
+    const responseMessage = ['This is the list of our students', output].join('\n');
+    response.send(responseMessage);
   }).catch(() => {
     response.status(500).send('This is the list of our students\nCannot load the database');
   });
